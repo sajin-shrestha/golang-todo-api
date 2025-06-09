@@ -1,0 +1,40 @@
+# Binaries for programs and plugins
+/bin/
+/*.exe
+/*.exe~
+/*.dll
+/*.so
+/*.dylib
+
+# Output of build tools
+/build/
+/dist/
+
+# Go build artifacts
+*.test
+*.out
+
+# Dependency directories (vendor/)
+vendor/
+
+# IDE/editor configs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# dotenv environment files
+.env
+
+# Logs
+*.log
+
+# Docker artifacts
+docker-compose.override.yml
+
+# Postgres data volume (if accidentally created locally)
+postgres_data/
