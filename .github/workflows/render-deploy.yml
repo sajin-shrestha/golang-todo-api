@@ -1,0 +1,37 @@
+name: Deploy to Render
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+
+      - name: Run Go tests (if any)
+        run: |
+          echo "Running Go tests..."
+          if go test -v ./... 2>&1 | tee test-output.txt | grep -q "no test files"; then
+            echo "✅ No test files found. Continuing without error."
+            exit 0
+          elif grep -q FAIL test-output.txt; then
+            echo "❌ Test(s) failed."
+            exit 1
+          else
+            echo "✅ Tests passed."
+          fi
+
+      - name: Trigger Render Deploy Hook
+        env:
+          DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: |
+          echo "🚀 Triggering Render deploy..."
+          curl -X POST "$DEPLOY_HOOK"
